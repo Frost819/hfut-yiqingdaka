@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description='定时自动打卡')
 parser.add_argument('--username', help='学号')
 parser.add_argument('--password', help='密码')
 parser.add_argument('--once', help='是否无视打卡时间，立即进行一次打卡并结束', action='store_true')
+parser.add_argument('--time', help='设定打卡时间', default='15:30')
 args = parser.parse_args()
 
 #浏览器选项
@@ -19,16 +20,18 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('blink-settings=imagesEnabled=false')
 
 #打卡时间
-hour = 15
-minute = 0
+hour = int(args.time.split(':')[0])
+minute = int(args.time.split(':')[1])
 
 #主循环
 while True:
     now_time = datetime.now()
     print(' 当前时间：', now_time, '\n', '设定打卡时间：', hour,':',minute)
     if now_time.hour == hour and now_time.minute == minute or args.once:
+        print('开始打卡')
         url="http://stu.hfut.edu.cn/xsfw/sys/xggzptapp/*default/index.do?min=1#/gzzm"
         browser=webdriver.Chrome(executable_path="./chromedriver", chrome_options=chrome_options)
         #进入首页
@@ -47,24 +50,24 @@ while True:
         #登录成功
         if 'cas.hfut.edu.cn' not in browser.current_url:
             #转到疫情信息收集页面
-            browser.switch_to.new_window('tab')
             browser.get('http://stu.hfut.edu.cn/xsfw/sys/xsyqxxsjapp/*default/index.do#/mrbpa')
             wait = WebDriverWait(browser, 5, 0.5)
             try:
                 wait.until(lambda browser: browser.find_element(By.XPATH, '//*[@id="save"]'))
             except Exception:
                 print('Error:打卡失败，请确认是否已打过卡')
+                browser.quit()
             else:
                 submit_button = browser.find_element(By.XPATH, '//*[@id="save"]')
                 #点击提交按钮
                 submit_button.click()
                 print('打卡成功!')
+                browser.quit()
             #args.once为True则立即结束程序
             if args.once : break
-            #关闭浏览器
-            browser.close()
         else:
             print('登录失败！请检查用户名和密码是否正确')
+            browser.quit()
             break
     #每30秒查询一次时间
     time.sleep(30)
