@@ -26,7 +26,7 @@ pip install selenium
 ```
 
 - 安装webdriver:
-  - 先查看chrome版本，在**https://npm.taobao.org/mirrors/chromedriver/**选择相应版本的chromedriver。将下载的chromedriver 解压至repo根目录下。
+  - 先查看chrome版本，在[ChromeDriver Mirror](https://npm.taobao.org/mirrors/chromedriver/)选择相应版本的chromedriver。将下载的chromedriver 解压至repo根目录下。
 
 ### 运行
 
@@ -44,4 +44,4 @@ repo内三个.bat脚本运行前均需要右键编辑，修改USERNAME和PASSWOR
 
 2. start_once.bat为一次性打卡脚本，立即进行一次打卡并退出。
 
-3. start_silent.bat与1功能相同，但会隐藏命令行窗口，如需关闭请在任务管理器-后台进程中关闭`Windows命令处理程序`和`Python`
+3. start_silent.bat与1功能相同，但会隐藏命令行窗口，如需退出请在任务管理器-后台进程中关闭`Windows命令处理程序`和`Python`
