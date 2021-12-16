@@ -32,7 +32,7 @@ while True:
     print(' 当前时间：', now_time, '\n', '设定打卡时间：', hour,':',minute)
     if now_time.hour == hour and now_time.minute == minute or args.once:
         print('开始打卡')
-        url="http://stu.hfut.edu.cn/xsfw/sys/xggzptapp/*default/index.do?min=1#/gzzm"
+        url="http://stu.hfut.edu.cn/xsfw/sys/emapfunauth/pages/welcome.do?service=http%3A%2F%2Fstu.hfut.edu.cn%2Fxsfw%2Fsys%2Fxggzptapp%2F*default%2Findex.do%3Fmin%3D1#/"
         browser=webdriver.Chrome(executable_path="./chromedriver", chrome_options=chrome_options)
         #进入首页
         browser.get(url)
@@ -50,15 +50,15 @@ while True:
         #登录成功
         if 'cas.hfut.edu.cn' not in browser.current_url:
             #转到疫情信息收集页面
-            browser.get('http://stu.hfut.edu.cn/xsfw/sys/xsyqxxsjapp/*default/index.do#/mrbpa')
+            browser.get('http://stu.hfut.edu.cn/xsfw/sys/swmxsyqxxsjapp/*default/index.do#')
             wait = WebDriverWait(browser, 5, 0.5)
             try:
-                wait.until(lambda browser: browser.find_element(By.XPATH, '//*[@id="save"]'))
+                wait.until(lambda browser: browser.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/div[6]/div/button'))
             except Exception:
                 print('Error:打卡失败，请确认是否已打过卡')
                 browser.quit()
             else:
-                submit_button = browser.find_element(By.XPATH, '//*[@id="save"]')
+                submit_button = browser.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/div[6]/div/button')
                 #点击提交按钮
                 submit_button.click()
                 print('打卡成功!')
